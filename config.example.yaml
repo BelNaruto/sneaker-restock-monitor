@@ -1,0 +1,21 @@
+# Sneaker Restock Monitor configuration
+# API key: https://rapidapi.com/belchiorarkad-FqvHs2EDOtP/api/kickscrew-sneakers-data
+
+collections:            # KicksCrew collection slugs (find more with /api/v4/collections/search)
+  - nike
+  - jordan
+pages_per_collection: 2 # 24 products per page
+
+keywords:               # optional keyword searches (uses /search/v2 + details per result)
+  - "travis scott"
+  - "yeezy 350"
+
+title_filter: []        # only alert when the title contains one of these words, e.g. ["dunk", "jordan 4"]
+sizes: ["9", "9.5", "10", "10.5"]   # only care about these US sizes ([] = all sizes)
+
+notify_new: true
+price_drop_percent: 5   # alert when the lowest in-stock price drops by at least this %
+silent_first_run: true  # first run only builds the baseline (no spam)
+interval_seconds: 300
+
+discord_webhook: ""     # or set the DISCORD_WEBHOOK_URL environment variable
