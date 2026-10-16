@@ -1,0 +1,22 @@
+# Free hosting: run the monitor every 15 minutes on GitHub Actions.
+# Add repository secrets RAPIDAPI_KEY and DISCORD_WEBHOOK_URL.
+name: sneaker-monitor
+on:
+  schedule: [{ cron: "*/15 * * * *" }]
+  workflow_dispatch:
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - uses: actions/cache/restore@v4
+        with: { path: state.json, key: monitor-state-, restore-keys: monitor-state- }
+      - run: "[ -f config.yaml ] || cp config.example.yaml config.yaml; python monitor.py --once"
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - uses: actions/cache/save@v4
+        with: { path: state.json, key: "monitor-state-${{ github.run_id }}" }
